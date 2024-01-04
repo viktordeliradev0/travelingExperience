@@ -1,0 +1,57 @@
+﻿@using System.Globalization
+@using travelingExperience.Data.Enums
+@model travelingExperience.Entity.Travel
+
+@{
+    ViewData["Title"] = "Travel Magazine";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card mb-3">
+                <div class="card-header bg-info text-white">
+                    <h4 class="card-title">@Model.StartDestination - @Model.EndDestination</h4>
+                    <p class="card-subtitle mb-2 text-muted">
+                        Start Date: @Model.StartDate.ToString("dd MMM yy") - End Date: @Model.EndDate.ToString("dd MMM yy")
+                    </p>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p class="card-text">
+                                <b>Description:</b><br />
+                                @Model.Descrition
+                            </p>
+                            <p class="card-text">
+                                <b>Seats Available:</b> @Model.Seats<br />
+                                <b>Price:</b> @Model.Price.ToString("c", CultureInfo.CurrentCulture)
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="card-text">
+                                <b>Status:</b><br />
+                                @if (DateTime.Now >= Model.StartDate && DateTime.Now <= Model.EndDate)
+                                {
+                                    <span class="badge bg-success">AVAILABLE</span>
+                                }
+                                else if (DateTime.Now > Model.EndDate)
+                                {
+                                    <span class="badge bg-danger">EXPIRED</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-primary">UPCOMING</span>
+                                }
+                            </p>
+                            <div class="text-end">
+                                <a class="btn btn-outline-success mt-2" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+                                <a class="btn btn-outline-secondary mt-2" asp-action="Index">Show All</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

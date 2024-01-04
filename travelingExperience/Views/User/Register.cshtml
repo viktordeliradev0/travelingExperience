@@ -1,0 +1,48 @@
+﻿@model travelingExperience.Models.RegisterModel
+
+@using (Html.BeginForm("Register", "User", FormMethod.Post))
+{
+    <div class="form-group">
+        @Html.LabelFor(model => model.Name)
+        @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.SName)
+        @Html.TextBoxFor(model => model.SName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.SName, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.UserName)
+        @Html.TextBoxFor(model => model.UserName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Password)
+        @Html.PasswordFor(model => model.Password, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Email)
+        @Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Age)
+        @Html.TextBoxFor(model => model.Age, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Age, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Number)
+        @Html.TextBoxFor(model => model.Number, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Number, "", new { @class = "text-danger" })
+    </div>
+
+    <button type="submit" class="btn btn-primary">Register</button>
+}

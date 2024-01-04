@@ -1,0 +1,57 @@
+﻿@model travelingExperience.Entity.Travel
+
+@{
+    ViewData["Title"] = "List of Travels";
+}
+
+<h1>Travels Data</h1>
+
+
+<a class="btn btn-primary btn-sm" href="/Travel/Create">New Game</a>
+<table class="table" style="border-collapse: collapse; width: 100%;">
+    <thead>
+        <tr style="background-color: #f2f2f2;">
+            <th style="border: 1px solid #ddd; padding: 8px;">@Html.DisplayNameFor(model => model.Id)</th>
+            <th style="border: 1px solid #ddd; padding: 8px;">@Html.DisplayNameFor(model => model.StartDate)</th>
+            <th style="border: 1px solid #ddd; padding: 8px;">@Html.DisplayNameFor(model => model.EndDate)</th>
+            <th style="border: 1px solid #ddd; padding: 8px;">@Html.DisplayNameFor(model => model.StartDestination)</th>
+            <th style="border: 1px solid #ddd; padding: 8px;">@Html.DisplayNameFor(model => model.EndDestination)</th>
+            <th style="border: 1px solid #ddd; padding: 8px;">@Html.DisplayNameFor(model => model.Price)</th>
+            <th style="border: 1px solid #ddd; padding: 8px;">@Html.DisplayNameFor(model => model.Seats)</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr style="border: 1px solid #ddd;">
+                <td style="border: 1px solid #ddd; padding: 8px;"> @Html.DisplayFor(modelItem => item.Id)</td>
+                <td style="border: 1px solid #ddd; padding: 8px;">@item.StartDate</td>
+                <td style="border: 1px solid #ddd; padding: 8px;">@item.EndDate</td>
+                <td style="border: 1px solid #ddd; padding: 8px;"> @Html.DisplayFor(modelItem => item.StartDestination)</td>
+                <td style="border: 1px solid #ddd; padding: 8px;"> @Html.DisplayFor(modelItem => item.EndDestination)</td>
+                <td style="border: 1px solid #ddd; padding: 8px;">@item.Price</td>
+                <td style="border: 1px solid #ddd; padding: 8px;">@item.Seats</td>
+                <td style="border: 1px solid #ddd; padding: 8px;">
+                    <a class="btn btn-outline-info" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                    <a class="btn btn-outline-info" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                    <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+<script>
+    function confirmDelete() {
+        var confirmation = confirm("Are you sure you want to delete?");
+
+        if (confirmation) {
+            // If confirmed, proceed with the delete operation by redirecting to the delete action or handling the deletion process
+            return true;
+        } else {
+            // If cancelled, prevent the default action (deletion)
+            return false;
+        }
+    }
+</script>

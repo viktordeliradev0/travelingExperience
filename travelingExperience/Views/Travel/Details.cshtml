@@ -1,0 +1,71 @@
+﻿@using System.Globalization
+@using travelingExperience.Data.Enums
+@model travelingExperience.Entity.Travel
+
+@{
+    ViewData["Title"] = "Travel Details";
+}
+
+<h1>Travel Details</h1>
+<div class="row">
+    <div class="col-md-8 offset-2">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="StartDestination" class="control-label">Start Destination:</label>
+                @Html.DropDownListFor(m => m.StartDestination, Enum.GetValues(typeof(TravelDestinations)).Cast<TravelDestinations>().Select(enumValue => new SelectListItem
+           {
+               Text = enumValue.ToString(),
+               Value = ((int)enumValue).ToString()
+           }), "Please select", new { @class = "form-control", @disabled = "disabled" })
+                <span asp-validation-for="StartDestination" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="EndDestination" class="control-label">End Destination:</label>
+                @Html.DropDownListFor(m => m.EndDestination, Enum.GetValues(typeof(TravelDestinations)).Cast<TravelDestinations>().Select(enumValue => new SelectListItem
+           {
+               Text = enumValue.ToString(),
+               Value = ((int)enumValue).ToString()
+           }), "Please select", new { @class = "form-control", @disabled = "disabled" })
+                <span asp-validation-for="EndDestination" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Descrition" class="control-label">Description:</label>
+                <input asp-for="Descrition" class="form-control" readonly />
+                <span asp-validation-for="Descrition" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="StartDate" class="control-label">Start Date:</label>
+                <input asp-for="StartDate" class="form-control" readonly />
+                <span asp-validation-for="StartDate" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="EndDate" class="control-label">End Date:</label>
+                <input asp-for="EndDate" class="form-control" readonly />
+                <span asp-validation-for="EndDate" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Price" class="control-label">Price:</label>
+                <input asp-for="Price" class="form-control" readonly />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">0
+                <label asp-for="Seats" class="control-label">Seats:</label>
+                <input asp-for="Seats" class="form-control" readonly />
+                <span asp-validation-for="Seats" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <a class="btn btn-outline-success float-right" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+                <a class="btn btn-outline-secondary mr-2" asp-action="Index">Show All</a>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,61 @@
+﻿@using System.Globalization
+@using travelingExperience.Data.Enums
+@model travelingExperience.Entity.Travel
+
+@{
+    ViewData["Title"] = "Create New Travel";
+}
+
+<h1>Create New Travel</h1>
+<div class="row">
+    <div class="col-md-8 offset-2">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="StartDestination" class="control-label">Тръгване от:</label>
+                @Html.DropDownListFor(m => m.StartDestination, Enum.GetValues(typeof(TravelDestinations)).Cast<TravelDestinations>().Select(enumValue => new SelectListItem
+           {
+               Text = enumValue.ToString(),
+               Value = ((int)enumValue).ToString()
+           }), "Please select", new { @class = "form-control" })
+                <span asp-validation-for="StartDestination" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EndDestination" class="control-label">Тръгване от:</label>
+                @Html.DropDownListFor(m => m.EndDestination, Enum.GetValues(typeof(TravelDestinations)).Cast<TravelDestinations>().Select(enumValue => new SelectListItem
+           {
+               Text = enumValue.ToString(),
+               Value = ((int)enumValue).ToString()
+           }), "Please select", new { @class = "form-control" })
+                <span asp-validation-for="EndDestination" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label aps-for="Desrition" class="control-label">Описание:</label>
+                <input asp-for="Descrition" class="form-control" />
+                <span asp-validation-for="Descrition" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label aps-for="StartDate" class="control-label"> Час на тръгване:</label>
+                <input asp-for="StartDate" class="form-control" />
+                <span asp-validation-for="StartDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label aps-for="EndDate" class="control-label"> Час на пристигане:</label>
+                <input asp-for="EndDate" class="form-control" />
+                <span asp-validation-for="EndDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label aps-for="Price" class="control-label">Цена:</label>
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label aps-for="Seats" class="control-label">Места:</label>
+                <input asp-for="Seats" class="form-control" />
+                <span asp-validation-for="Seats" class="text-danger"></span>
+            </div>
+            <input type="submit" value="Create" class="btn btn-outline-success" />
+        </form>
+    </div>
+</div>
+
