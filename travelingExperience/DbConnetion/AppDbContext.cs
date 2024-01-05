@@ -1,19 +1,18 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using travelingExperience.Entity;
 using travelingExperience.Models;
 
 namespace travelingExperience.DbConnetion
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<ApplicationUser>
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) 
         {
            
         }
 
-        public AppDbContext()
-        {
-        }
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

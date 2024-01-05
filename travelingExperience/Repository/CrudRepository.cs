@@ -1,5 +1,6 @@
 ﻿
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using travelingExperience.DbConnetion;
 
 namespace travelingExperience.Repository
@@ -8,9 +9,9 @@ namespace travelingExperience.Repository
     {
         private readonly AppDbContext context;
 
-        public CrudRepository()
+        public CrudRepository(AppDbContext ob)
         {
-            context = new AppDbContext();
+            context = ob;
         }
         public List<T> GetAll()
         {

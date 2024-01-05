@@ -7,9 +7,9 @@ namespace travelingExperience.Repository
     public class UserRepository
     {
         private AppDbContext context;
-        public UserRepository()
+        public UserRepository(AppDbContext ob)
         {
-            context = new AppDbContext();
+            context = ob;
         }
         public User FindByUsernameAndPassword(string username, string password)
         {
