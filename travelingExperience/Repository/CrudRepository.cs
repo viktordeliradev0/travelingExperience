@@ -13,6 +13,9 @@ namespace travelingExperience.Repository
         {
             context = ob;
         }
+
+        
+
         public List<T> GetAll()
         {
             return context.Set<T>().ToList();

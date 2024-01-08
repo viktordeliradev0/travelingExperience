@@ -6,20 +6,28 @@ using travelingExperience.Models;
 using Scrypt;
 using travelingExperience.Repository;
 using travelingExperience.Entity;
+using travelingExperience.DbConnetion;
+using Microsoft.AspNetCore.Identity;
+using travelingExperience.Data;
 
 
 namespace travelingExperience.Controllers
 {
     public class UserController : Controller
     {
-        private ScryptEncoder encoder;
-        private UserRepository userRepository;
-        private CrudRepository<User> crudRepository;
-        public UserController()
+        private readonly AppDbContext _db;
+        private readonly ScryptEncoder encoder;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _singInManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
+
+        public UserController(AppDbContext db,UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> singInManager, RoleManager<IdentityRole> roleManager)
         {
             encoder = new ScryptEncoder();
-            userRepository = new UserRepository();
-            crudRepository = new CrudRepository<User>();
+            _singInManager = singInManager;
+            _roleManager = roleManager;
+            _db = db;
+            _userManager = userManager;
         }
         public IActionResult Login()
         {
@@ -31,53 +39,64 @@ namespace travelingExperience.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login(LoginModel model)
+        [ValidateAntiForgeryToken]
+
+        public async Task<IActionResult> Login(LoginModel model)
         {
-            User user = userRepository.FindByUsernameAndPassword(model.UserName, model.Password);
-            if (user == null)
+            if (ModelState.IsValid)
             {
-                return View(model);
-            }
-            else
-            {
-                List<Claim> claims = new List<Claim>() {
-                    new Claim(ClaimTypes.NameIdentifier , $"{user.Id}"),
-                    new Claim(ClaimTypes.Email , user.Email),
-                    new Claim(ClaimTypes.Name, user.Name),
-                    new Claim(ClaimTypes.Role , "User"),
-                    new Claim(ClaimTypes.Sid , user.Id.ToString())
-                };
-
-                ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims,
-                CookieAuthenticationDefaults.AuthenticationScheme);
-
-                AuthenticationProperties properties = new AuthenticationProperties()
+                var result = await _singInManager.PasswordSignInAsync(model.UserName, model.Password,model.RememberMe,false);
+                if (result.Succeeded)
                 {
-                    AllowRefresh = true,
-                    IsPersistent = model.RememberMe
-                };
-
-                HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
-                    new ClaimsPrincipal(claimsIdentity), properties);
+                    return RedirectToAction("Index", "Home");
+                }
+                ModelState.AddModelError("", "Invalid Login attempt!");
             }
-            return RedirectToAction("Index", "Home");
+            return View(model);
         }
+       
+        [HttpPost] 
+        [ValidateAntiForgeryToken]
 
+        public async Task<IActionResult> Register(RegisterModel model)
+        {
+
+            if (!_roleManager.RoleExistsAsync(Helper.Admin).GetAwaiter().GetResult())
+            {
+                await _roleManager.RoleExistsAsync(Helper.Admin);
+                await _roleManager.RoleExistsAsync(Helper.User);
+            }
+           
+            if (ModelState.IsValid)
+            {
+                var user = new ApplicationUser
+                {
+                    UserName = model.UserName,
+                    Email = model.Email,
+                    Name = model.Name,
+                    SName = model.SName,
+                    Number = model.Number,
+                    Age = model.Age
+                };
+               var result = await _userManager.CreateAsync(user,model.Password);
+                if (result.Succeeded)
+                {
+                    await _userManager.AddToRoleAsync(user, model.RoleName);
+                    await _singInManager.SignInAsync(user, isPersistent: false);
+                    return RedirectToAction("Index","Home");
+                }
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
+            }
+          return View(model);
+        }
+       
         [HttpPost]
-        public IActionResult Register(RegisterModel model)
+        public async Task<IActionResult> Logoff()
         {
-          
-
-            model.Password = encoder.Encode(model.Password);
-
-            crudRepository.Insert(new User(model.Name, model.SName, model.UserName,model.Email,model.Password,model.Number,model.Age));
-
-            return RedirectToAction("Login", new { model = model });
-        }
-        public IActionResult Logout()
-        {
-            HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-
+            await _singInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
     }

@@ -1,48 +1,93 @@
 ﻿@model travelingExperience.Models.RegisterModel
 
-@using (Html.BeginForm("Register", "User", FormMethod.Post))
-{
-    <div class="form-group">
-        @Html.LabelFor(model => model.Name)
-        @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
-    </div>
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.SName)
-        @Html.TextBoxFor(model => model.SName, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.SName, "", new { @class = "text-danger" })
+<h2>
+    Sign Up
+</h2>
+<form method="post" asp-action="Register" asp-controller="User">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="form-group row">
+        <label class="col-md-2" asp-for="Name"></label>
+        <div class="col-md-10">
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
     </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.UserName)
-        @Html.TextBoxFor(model => model.UserName, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+    <br/>
+    <div class="form-group row">
+        <label class="col-md-2" asp-for="SName"></label>
+        <div class="col-md-10">
+            <input asp-for="SName" class="form-control" />
+            <span asp-validation-for="SName" class="text-danger"></span>
+        </div>
     </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.Password)
-        @Html.PasswordFor(model => model.Password, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+    <br/>
+    <div class="form-group row">
+        <label class="col-md-2" asp-for="UserName"></label>
+        <div class="col-md-10">
+            <input asp-for="UserName" class="form-control" />
+            <span asp-validation-for="UserName" class="text-danger"></span>
+        </div>
     </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.Email)
-        @Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+   <br/>
+    <div class="form-group row">
+        <label class="col-md-2" asp-for="Email"></label>
+        <div class="col-md-10">
+            <input asp-for="Email" class="form-control" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
     </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.Age)
-        @Html.TextBoxFor(model => model.Age, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.Age, "", new { @class = "text-danger" })
+    <br/>
+    <div class="form-group row">
+        <label class="col-md-2" asp-for="Password"></label>
+        <div class="col-md-10">
+            <input asp-for="Password" class="form-control" />
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
     </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.Number)
-        @Html.TextBoxFor(model => model.Number, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.Number, "", new { @class = "text-danger" })
+    <br/>
+    <div class="form-group row">
+        <label class="col-md-2" asp-for="ConfirmPassword"></label>
+        <div class="col-md-10">
+            <input asp-for="ConfirmPassword" class="form-control" />
+            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+        </div>
     </div>
-
-    <button type="submit" class="btn btn-primary">Register</button>
+    <br />
+    <div class="form-group row">
+        <label class="col-md-2" asp-for="Number"></label>
+        <div class="col-md-10">
+            <input asp-for="Number" class="form-control" />
+            <span asp-validation-for="Number" class="text-danger"></span>
+        </div>
+    </div>
+    <br />
+    <div class="form-group row">
+        <label class="col-md-2" asp-for="Age"></label>
+        <div class="col-md-10">
+            <input asp-for="Age" class="form-control" />
+            <span asp-validation-for="Age" class="text-danger"></span>
+        </div>
+        <br />
+    </div>
+    <div class="form-group row">
+        <label class="col-md-2" asp-for="RoleName"></label>
+        <div class="col-md-10">
+           <select asp-for="RoleName"
+                    asp-items="@travelingExperience.Data.Helper.GetRolesForDropDown()" class="form-control"></select>
+        </div>
+    </div>
+    <br/>
+    <div class="form-group">
+        <div class="col-md-10 offset-md-2">
+            <input type="submit" value="Register" class="btn btn-success" />
+        </div>
+    </div>
+    <br/>
+    <p class="col-md-10 offset-md-2">
+        <a asp-action="Login">Sing In</a>
+    </p>
+</form>
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
 }
