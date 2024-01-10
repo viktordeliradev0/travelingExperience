@@ -19,8 +19,4 @@
     <PackageReference Include="Scrypt.NET" Version="1.3.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Utility\" />
-  </ItemGroup>
-
 </Project>

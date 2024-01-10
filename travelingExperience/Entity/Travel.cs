@@ -9,9 +9,9 @@ namespace travelingExperience.Entity
         [Display(Name = "Id")]
         public int Id { get; set; }
 
-        [Display(Name = "TravelID")]
-
-        public int UserID { get; set; }
+        [Display(Name = "UserID")]
+        [Required]
+        public string UserID { get; set; }
 
         [Required(ErrorMessage = "Please select a start destination")]
         [Display(Name = "Start Destination")]

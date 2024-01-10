@@ -16,7 +16,7 @@
                             <p class="card-text">
                                 <h5 class="card-title">
 
-                                    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                                    @if (User.Identity.IsAuthenticated && User.IsInRole("ADMIN"))
                                     {
                                         <a class="text-white float-right" asp-action="Edit" asp-route-id="@item.Id"><i class="bi bi-pencil-square"></i></a>
                                     }

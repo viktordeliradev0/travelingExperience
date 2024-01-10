@@ -29,12 +29,39 @@ namespace travelingExperience.Controllers
             _db = db;
             _userManager = userManager;
         }
+        public async Task<IActionResult> Profile()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return NotFound(); // Handle case where user is not found
+            }
+
+            return View(user); // Pass the user object to the view
+        }
+        public async Task<IActionResult> UserTravelsAsync()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var userID = _userManager.GetUserId(User);
+            var userTravels = _db.Travels.Where(Travel => Travel.UserID == user.Id).ToList();
+            return View(userTravels);
+        }
+        public IActionResult Index()
+        {
+            var users = _userManager.Users.ToList();
+            return View(users);
+        }
         public IActionResult Login()
         {
             return View();
         }
-        public IActionResult Register()
+        public async Task<IActionResult> Register()
         {
+            if (!_roleManager.RoleExistsAsync(Helper.Admin).GetAwaiter().GetResult())
+            {
+                await _roleManager.RoleExistsAsync(Helper.Admin);
+                await _roleManager.RoleExistsAsync(Helper.User);
+            }
             return View();
         }
 
@@ -61,11 +88,7 @@ namespace travelingExperience.Controllers
         public async Task<IActionResult> Register(RegisterModel model)
         {
 
-            if (!_roleManager.RoleExistsAsync(Helper.Admin).GetAwaiter().GetResult())
-            {
-                await _roleManager.RoleExistsAsync(Helper.Admin);
-                await _roleManager.RoleExistsAsync(Helper.User);
-            }
+          
            
             if (ModelState.IsValid)
             {

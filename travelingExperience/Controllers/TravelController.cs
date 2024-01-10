@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using travelingExperience.Data;
 using travelingExperience.Data.Services;
-using travelingExperience.Models;
 using travelingExperience.Entity;
 
 namespace sharedTravel.Controllers
@@ -42,7 +40,7 @@ namespace sharedTravel.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Create([Bind("TravelID,StartDestination,EndDestination,Descrition,StartDate,EndDate,Price,Seats")] Travel travel)
+        public async Task<IActionResult> Create([Bind("UserID,StartDestination,EndDestination,Descrition,StartDate,EndDate,Price,Seats")] Travel travel)
         {
             if (!ModelState.IsValid)
             {

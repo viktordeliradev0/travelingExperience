@@ -1,0 +1,52 @@
+﻿@model IEnumerable<ApplicationUser>
+@{
+    ViewData["Title"] = "List of Users";
+}
+
+<h1>Users Data</h1>
+
+
+
+<table class="table" style="border-collapse: collapse; width: 100%;">
+    <thead>
+        <tr style="background-color: #f2f2f2;">
+            <th style="border: 1px solid #ddd; padding: 8px;">@Html.DisplayNameFor(model => model.Name)</th>
+            <th style="border: 1px solid #ddd; padding: 8px;">@Html.DisplayNameFor(model => model.SName)</th>
+            <th style="border: 1px solid #ddd; padding: 8px;">@Html.DisplayNameFor(model => model.UserName)</th>
+            <th style="border: 1px solid #ddd; padding: 8px;">@Html.DisplayNameFor(model => model.Email)</th>
+            <th style="border: 1px solid #ddd; padding: 8px;">@Html.DisplayNameFor(model => model.Number)</th>
+            <th style="border: 1px solid #ddd; padding: 8px;">@Html.DisplayNameFor(model => model.Age)</th>
+         
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr style="border: 1px solid #ddd;">
+                <td style="border: 1px solid #ddd; padding: 8px;"> @Html.DisplayFor(modelItem => item.Name)</td>
+                <td style="border: 1px solid #ddd; padding: 8px;">@Html.DisplayFor(modelItem => item.SName)</td>
+                <td style="border: 1px solid #ddd; padding: 8px;">@Html.DisplayFor(modelItem => item.UserName)</td>
+                <td style="border: 1px solid #ddd; padding: 8px;"> @Html.DisplayFor(modelItem => item.Email)</td>
+                <td style="border: 1px solid #ddd; padding: 8px;"> @Html.DisplayFor(modelItem => item.Number)</td>
+                <td style="border: 1px solid #ddd; padding: 8px;">@Html.DisplayFor(modelItem => item.Age)</td>
+                
+               
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+<script>
+    function confirmDelete() {
+        var confirmation = confirm("Are you sure you want to delete?");
+
+        if (confirmation) {
+            // If confirmed, proceed with the delete operation by redirecting to the delete action or handling the deletion process
+            return true;
+        } else {
+            // If cancelled, prevent the default action (deletion)
+            return false;
+        }
+    }
+</script>

@@ -16,19 +16,7 @@ namespace travelingExperience.Repository
 
         
 
-        public User FindByUsernameAndPassword(string username, string password)
-        {
-           ScryptEncoder encoder = new ScryptEncoder();
-            foreach (var user in context.Users)
-            {
-                if (user.Name.Equals(username) && encoder.Compare(password, user.Password))
-                {
-                    return user;
-                }
-               
-            }
-            return null;
-        }
+     
 
      
 
