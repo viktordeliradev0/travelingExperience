@@ -24,6 +24,7 @@ public class Program
                 .UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectionString"))
         );
 
+        builder.Services.AddControllersWithViews();
 
         var app = builder.Build();
 

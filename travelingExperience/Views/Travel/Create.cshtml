@@ -1,4 +1,5 @@
 ﻿@using System.Globalization
+@using System.Security.Claims
 @using travelingExperience.Data.Enums
 @model travelingExperience.Entity.Travel
 
@@ -11,6 +12,8 @@
     <div class="col-md-8 offset-2">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="UserID" value="@User.FindFirstValue(ClaimTypes.NameIdentifier)" />
+
             <div class="form-group">
                 <label asp-for="StartDestination" class="control-label">Тръгване от:</label>
                 @Html.DropDownListFor(m => m.StartDestination, Enum.GetValues(typeof(TravelDestinations)).Cast<TravelDestinations>().Select(enumValue => new SelectListItem

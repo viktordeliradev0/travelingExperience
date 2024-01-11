@@ -45,5 +45,9 @@ namespace travelingExperience.Data.Services
             await _context.SaveChangesAsync();
             return newTravel;
         }
+        public async Task<List<Travel>> GetTravelsByUserIdAsync(string userId)
+        {
+            return await _context.Travels.Where(t => t.UserID == userId).ToListAsync();
+        }
     }
 }

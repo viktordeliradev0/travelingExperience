@@ -9,6 +9,7 @@ using travelingExperience.Entity;
 using travelingExperience.DbConnetion;
 using Microsoft.AspNetCore.Identity;
 using travelingExperience.Data;
+using travelingExperience.Data.Services;
 
 
 namespace travelingExperience.Controllers
@@ -20,14 +21,24 @@ namespace travelingExperience.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _singInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly ITravelsService _travelsService;
 
-        public UserController(AppDbContext db,UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> singInManager, RoleManager<IdentityRole> roleManager)
+        public UserController(AppDbContext db,UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> singInManager, RoleManager<IdentityRole> roleManager,   ITravelsService travelsService)
         {
             encoder = new ScryptEncoder();
             _singInManager = singInManager;
             _roleManager = roleManager;
             _db = db;
             _userManager = userManager;
+            _travelsService = travelsService;
+        }
+        [HttpGet]
+         public async Task<IActionResult> UserTravels ()
+        {
+            var userId = _userManager.GetUserId(User);
+            var userTravels = await _travelsService.GetTravelsByUserIdAsync(userId);
+
+            return View(userTravels);
         }
         public async Task<IActionResult> Profile()
         {
@@ -39,13 +50,7 @@ namespace travelingExperience.Controllers
 
             return View(user); // Pass the user object to the view
         }
-        public async Task<IActionResult> UserTravelsAsync()
-        {
-            var user = await _userManager.GetUserAsync(User);
-            var userID = _userManager.GetUserId(User);
-            var userTravels = _db.Travels.Where(Travel => Travel.UserID == user.Id).ToList();
-            return View(userTravels);
-        }
+       
         public IActionResult Index()
         {
             var users = _userManager.Users.ToList();

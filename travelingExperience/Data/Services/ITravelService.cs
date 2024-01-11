@@ -14,6 +14,6 @@ namespace travelingExperience.Data.Services
         Task<Travel> UpdateAsync(int id,Travel travel);
 
         Task DeleteAsync(int id);
-      
+        Task<List<Travel>> GetTravelsByUserIdAsync(string userId);
     }
 }

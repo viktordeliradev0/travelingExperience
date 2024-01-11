@@ -42,12 +42,15 @@ namespace sharedTravel.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([Bind("UserID,StartDestination,EndDestination,Descrition,StartDate,EndDate,Price,Seats")] Travel travel)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                return View(travel);
+              
+                   await  _service.AddAsync(travel);
+                return RedirectToAction("Index");
+
             }
-            await _service.AddAsync(travel);
-            return RedirectToAction("Index");
+            return View(travel);
+
         }
 
         public async Task<IActionResult> Details(int id)
@@ -69,13 +72,14 @@ namespace sharedTravel.Controllers
         public async Task<IActionResult> Edit(int id, Travel travel)
         {
             travel.Id = 0;
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                return View(travel);
+                await _service.UpdateAsync(id, travel);
+                await _service.DeleteAsync(id);
+                return RedirectToAction("Index");
             }
-            await _service.UpdateAsync(id, travel);
-            await _service.DeleteAsync(id);
-            return RedirectToAction("Index");
+           
+            return View(travel);
         }
 
         public async Task<IActionResult> Delete(int id)
