@@ -10,7 +10,18 @@ namespace travelingExperience.DbConnetion
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) 
         {
            
-        }       
+        }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Travel>()
+                .HasOne(t => t.User)
+                .WithMany(u => u.Travels)
+                .HasForeignKey(t => t.UserID);
+
+
+            
+        }
         public DbSet<Travel> Travels { get; set; }
         public DbSet<Comment> Comments { get; set; }
     }

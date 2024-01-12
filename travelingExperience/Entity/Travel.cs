@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using travelingExperience.Data.Enums;
+using travelingExperience.Models;
 
 namespace travelingExperience.Entity
 {
@@ -42,7 +44,8 @@ namespace travelingExperience.Entity
         public int Seats { get; set; }
 
         //Relationship
-
+        [ForeignKey("UserID")]
+        public ApplicationUser User { get; set; }
 
 
 

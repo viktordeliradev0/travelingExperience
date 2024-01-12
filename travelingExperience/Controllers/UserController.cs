@@ -1,11 +1,6 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
+﻿using Microsoft.AspNetCore.Mvc;
 using travelingExperience.Models;
 using Scrypt;
-using travelingExperience.Repository;
-using travelingExperience.Entity;
 using travelingExperience.DbConnetion;
 using Microsoft.AspNetCore.Identity;
 using travelingExperience.Data;
@@ -22,6 +17,7 @@ namespace travelingExperience.Controllers
         private readonly SignInManager<ApplicationUser> _singInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ITravelsService _travelsService;
+
 
         public UserController(AppDbContext db,UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> singInManager, RoleManager<IdentityRole> roleManager,   ITravelsService travelsService)
         {
@@ -43,14 +39,75 @@ namespace travelingExperience.Controllers
         public async Task<IActionResult> Profile()
         {
             var user = await _userManager.GetUserAsync(User);
+             
+          
+            if (user == null)
+            {
+                return NotFound(); // Handle case where user is not found
+            }
+         
+         
+
+            return View(user); // Pass the user object to the view
+        }
+        public async Task<IActionResult> ProfileView(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+           
             if (user == null)
             {
                 return NotFound(); // Handle case where user is not found
             }
 
-            return View(user); // Pass the user object to the view
+            //var comments = _db.Comments.Where(c => c.UserID == id).ToList();
+
+            //var userProfileViewModel = new UserProfileViewModel
+            //{
+            //    Name = user.Name,
+            //    SName = user.SName,
+            //    UserName = user.UserName,
+            //    Email = user.Email,
+            //    Number = user.Number,
+            //    Age = user.Age,
+            //    Comments = comments
+
+            //};
+
+            return View(user);
         }
-       
+        //[HttpPost]
+        //public async Task<IActionResult> AddComment(UserProfileViewModel model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        var newComment = new Comment
+        //        {
+        //            UserID = model.User.Id,
+        //            CommentText = model.NewCommentText,
+        //            CommentDate = DateTime.Now
+        //        };
+
+        //        // Add the new comment to the database
+        //        _db.Comments.Add(newComment);
+        //        await _db.SaveChangesAsync();
+
+        //        // Optionally, you can update the UserComments property in your model
+        //        model.Comments.Add(new Comment
+        //        {
+        //            CommentText = newComment.CommentText,
+        //            CommentDate = newComment.CommentDate
+        //        });
+
+        //        // Redirect back to the profile page or handle as needed
+        //        return RedirectToAction("Profile", new { id = model.User.Id });
+        //    }
+
+        //    // If the model state is not valid, you might want to handle this case (e.g., show an error message)
+        //    return View("Error");
+        //}
+
+
+
         public IActionResult Index()
         {
             var users = _userManager.Users.ToList();

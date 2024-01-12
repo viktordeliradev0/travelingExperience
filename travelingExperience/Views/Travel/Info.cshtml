@@ -2,6 +2,7 @@
 @using travelingExperience.Data.Enums
 @model travelingExperience.Entity.Travel
 
+
 @{
     ViewData["Title"] = "Travel Magazine";
 }
@@ -20,6 +21,17 @@
                     <div class="row">
                         <div class="col-md-6">
                             <p class="card-text">
+                                <b>Posted By:</b><br />
+                                @if (Model != null && Model.User != null)
+                                {
+                                    <p>@Model.User.Id</p>
+                                <a href="@Url.Action("ProfileView", "User", new { id = Model.User.Id })">@Model.User.UserName</a>
+                                }
+                                else
+                                {
+                                    <span>User not available</span>
+                                }
+                                <br />
                                 <b>Description:</b><br />
                                 @Model.Descrition
                             </p>

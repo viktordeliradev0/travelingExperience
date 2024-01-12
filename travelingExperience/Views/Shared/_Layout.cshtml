@@ -33,9 +33,7 @@
                         }
                         @if (User.Identity.IsAuthenticated && User.IsInRole("USER"))
                         {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Travel" asp-action="Create">Create</a>
-                            </li>
+                           
                         }
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Travel" asp-action="Index1">Travels</a>

@@ -1,0 +1,34 @@
+﻿@model ApplicationUser
+
+<h1>@Model.UserName Profile</h1>
+
+<div>
+    <p><strong>Name:</strong> @Model.Name</p>
+    <p><strong>Surname:</strong> @Model.SName</p>
+    <p><strong>Username:</strong> @Model.UserName</p>
+    <p><strong>Email:</strong> @Model.Email</p>
+    <p><strong>Number:</strong> @Model.Number</p>
+    <p><strong>Age:</strong> @Model.Age</p>
+   
+</div>
+@* @if (Model.Comments.Any())
+{
+    <ul>
+        @foreach (var comment in Model.Comments)
+        {
+            <li>@comment.CommentText - Posted at @comment.CommentDate</li>
+        }
+    </ul>
+}
+else
+{
+    <p>No comments yet.</p>
+}
+<form method="post" asp-action="AddComment">
+    <input type="hidden" name="userId" value="@Model.User.Id" />
+    <div class="form-group">
+        <label for="commentText">Add Comment:</label>
+        <textarea class="form-control" id="commentText" name="commentText" rows="3"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form> *@
