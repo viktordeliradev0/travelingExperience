@@ -5,6 +5,8 @@ using travelingExperience.DbConnetion;
 using Microsoft.AspNetCore.Identity;
 using travelingExperience.Data;
 using travelingExperience.Data.Services;
+using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 
 namespace travelingExperience.Controllers
@@ -17,9 +19,10 @@ namespace travelingExperience.Controllers
         private readonly SignInManager<ApplicationUser> _singInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ITravelsService _travelsService;
+        private readonly CommentService _commentService;
 
 
-        public UserController(AppDbContext db,UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> singInManager, RoleManager<IdentityRole> roleManager,   ITravelsService travelsService)
+        public UserController(AppDbContext db, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> singInManager, RoleManager<IdentityRole> roleManager, ITravelsService travelsService, CommentService commentService)
         {
             encoder = new ScryptEncoder();
             _singInManager = singInManager;
@@ -27,54 +30,112 @@ namespace travelingExperience.Controllers
             _db = db;
             _userManager = userManager;
             _travelsService = travelsService;
+            _commentService = commentService;
         }
         [HttpGet]
-         public async Task<IActionResult> UserTravels ()
+        public async Task<IActionResult> UserTravels()
         {
             var userId = _userManager.GetUserId(User);
             var userTravels = await _travelsService.GetTravelsByUserIdAsync(userId);
 
             return View(userTravels);
         }
-        public async Task<IActionResult> Profile()
+        public async Task<IActionResult> Profile(string id)
         {
             var user = await _userManager.GetUserAsync(User);
-             
-          
+
+
             if (user == null)
             {
                 return NotFound(); // Handle case where user is not found
             }
-         
-         
 
-            return View(user); // Pass the user object to the view
+            var model = new UserProfileViewModel
+            {
+                Name = user.Name,
+                SName = user.SName,
+                UserName = user.UserName,
+                Email = user.Email,
+                Number = user.Number,
+                Age = user.Age,
+                Comments = user.Comments
+            };
+
+            return View(model);
+
+
         }
+        private async Task<ApplicationUser> GetUserByIdAsync(string userId)
+        {
+            return await _db.Users.FindAsync(userId);
+        }
+
+        private async Task<ApplicationUser> GetUserByIdOrNotFoundAsync(string userId)
+        {
+            var user = await GetUserByIdAsync(userId);
+            if (user == null)
+            {
+                return null; // or handle the case where user is not found
+            }
+
+            return user;
+        }
+
         public async Task<IActionResult> ProfileView(string id)
         {
-            var user = await _userManager.FindByIdAsync(id);
-           
+            var user = await GetUserByIdOrNotFoundAsync(id);
+
             if (user == null)
             {
                 return NotFound(); // Handle case where user is not found
             }
 
-            //var comments = _db.Comments.Where(c => c.UserID == id).ToList();
+            var comments = _commentService.GetCommentsByUserId(id);
 
-            //var userProfileViewModel = new UserProfileViewModel
-            //{
-            //    Name = user.Name,
-            //    SName = user.SName,
-            //    UserName = user.UserName,
-            //    Email = user.Email,
-            //    Number = user.Number,
-            //    Age = user.Age,
-            //    Comments = comments
+            var model = new UserProfileViewModel
+            {
+                Name = user.Name,
+                SName = user.SName,
+                UserName = user.UserName,
+                Email = user.Email,
+                Number = user.Number,
+                Age = user.Age,
+                Comments = user.Comments
+            };
 
-            //};
-
-            return View(user);
+            return View(model);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> AddComment(string userId, string commentText)
+        {
+            var targetUser = await GetUserByIdAsync(userId);
+
+            if (targetUser == null)
+            {
+                return NotFound(); // Handle case where target user is not found
+            }
+
+            var newComment = new Comment
+            {
+                UserID = userId,
+                CommentText = commentText,
+                CommentDate = DateTime.Now
+            };
+
+            targetUser.Comments = targetUser.Comments ?? new List<Comment>();
+            targetUser.Comments.Add(newComment);
+
+            await _commentService.SaveChangesAsync();
+
+            return RedirectToAction("ProfileView", new { id = userId });
+        }
+
+
+
+
+
+
         //[HttpPost]
         //public async Task<IActionResult> AddComment(UserProfileViewModel model)
         //{
@@ -134,7 +195,7 @@ namespace travelingExperience.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await _singInManager.PasswordSignInAsync(model.UserName, model.Password,model.RememberMe,false);
+                var result = await _singInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, false);
                 if (result.Succeeded)
                 {
                     return RedirectToAction("Index", "Home");
@@ -143,15 +204,15 @@ namespace travelingExperience.Controllers
             }
             return View(model);
         }
-       
-        [HttpPost] 
+
+        [HttpPost]
         [ValidateAntiForgeryToken]
 
         public async Task<IActionResult> Register(RegisterModel model)
         {
 
-          
-           
+
+
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser
@@ -163,21 +224,21 @@ namespace travelingExperience.Controllers
                     Number = model.Number,
                     Age = model.Age
                 };
-               var result = await _userManager.CreateAsync(user,model.Password);
+                var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
                     await _userManager.AddToRoleAsync(user, model.RoleName);
                     await _singInManager.SignInAsync(user, isPersistent: false);
-                    return RedirectToAction("Index","Home");
+                    return RedirectToAction("Index", "Home");
                 }
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError("", error.Description);
                 }
             }
-          return View(model);
+            return View(model);
         }
-       
+
         [HttpPost]
         public async Task<IActionResult> Logoff()
         {

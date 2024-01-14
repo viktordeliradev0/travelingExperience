@@ -16,6 +16,9 @@ public class Program
         builder.Services.AddIdentity<ApplicationUser, IdentityRole>().
             AddEntityFrameworkStores<AppDbContext>()
             .AddRoleManager<RoleManager<IdentityRole>>();
+        // Other service registrations
+        builder.Services.AddScoped<CommentService>();
+
 
 
         builder.Services.AddScoped<ITravelsService, TravelsService>();
@@ -25,7 +28,7 @@ public class Program
         );
 
         builder.Services.AddControllersWithViews();
-
+        builder.Services.AddScoped<UserManager<ApplicationUser>>();
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.

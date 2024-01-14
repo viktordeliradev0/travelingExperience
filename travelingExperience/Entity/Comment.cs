@@ -12,6 +12,7 @@ namespace travelingExperience.Models
         
         [Required]
         public string CommentText { get; set; }
+       
         [DataType(DataType.Date)]
         public DateTime CommentDate { get; set; }
         [ForeignKey(nameof(UserID))]

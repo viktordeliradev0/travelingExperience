@@ -1,4 +1,4 @@
-﻿@model ApplicationUser
+﻿@model UserProfileViewModel
 
 <h1>@Model.UserName Profile</h1>
 
@@ -9,10 +9,11 @@
     <p><strong>Email:</strong> @Model.Email</p>
     <p><strong>Number:</strong> @Model.Number</p>
     <p><strong>Age:</strong> @Model.Age</p>
-   
 </div>
-@* @if (Model.Comments.Any())
+
+@if (Model.Comments.Any())
 {
+    <h2>Comments</h2>
     <ul>
         @foreach (var comment in Model.Comments)
         {
@@ -24,11 +25,16 @@ else
 {
     <p>No comments yet.</p>
 }
+
 <form method="post" asp-action="AddComment">
-    <input type="hidden" name="userId" value="@Model.User.Id" />
+    @if (Model.User != null)
+    {
+        <input type="hidden" name="userId" value="@Model.User.Id" />
+    }
+
     <div class="form-group">
         <label for="commentText">Add Comment:</label>
         <textarea class="form-control" id="commentText" name="commentText" rows="3"></textarea>
     </div>
     <button type="submit" class="btn btn-primary">Submit</button>
-</form> *@
+</form>

@@ -1,0 +1,18 @@
+﻿@model List<Comment>
+
+<h2>All Comments</h2>
+
+@if (Model != null && Model.Any())
+{
+    <ul>
+        @foreach (var comment in Model)
+        {
+            <li>@comment.CommentText - Posted at @comment.CommentDate</li>
+        }
+    </ul>
+}
+else
+{
+    <p>No comments yet.</p>
+}
+

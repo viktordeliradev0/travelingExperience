@@ -1,4 +1,4 @@
-﻿@model ApplicationUser
+﻿@model UserProfileViewModel
 
 <h1>@Model.UserName Profile</h1>
 
@@ -11,4 +11,19 @@
     <p><strong>Age:</strong> @Model.Age</p>
    
 </div>
+@if (Model.Comments != null && Model.Comments.Any())
+
+{
+    <h2>Comments</h2>
+    <ul>
+        @foreach (var comment in Model.Comments)
+        {
+            <li>@comment.CommentText - Posted at @comment.CommentDate</li>
+        }
+    </ul>
+}
+else
+{
+    <p>No comments yet.</p>
+}
 
