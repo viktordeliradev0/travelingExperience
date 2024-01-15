@@ -57,10 +57,10 @@
                                     <i class="bi bi-eye-fill"></i> Show Details
                                 </a>
                                 <a class="btn btn-success text-white @((DateTime.Now > item.EndDate) ? "disabled" : "")"
-                                   asp-controller="Orders"
-                                   asp-action="AddItemToShoppingCart"
+                                   asp-controller="Travel"
+                                   asp-action="info"
                                    asp-route-id="@item.Id">
-                                    <i class="bi bi-cart-plus"></i> Add to Cart (Price @item.Price.ToString("c"))
+                                    <i class="bi bi-cart-plus"></i> Add to Liked (Price @item.Price.ToString("c"))
                                 </a>
                             </p>
                         </div>

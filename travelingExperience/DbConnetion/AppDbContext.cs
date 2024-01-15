@@ -7,9 +7,9 @@ namespace travelingExperience.DbConnetion
 {
     public class AppDbContext : IdentityDbContext<ApplicationUser>
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) 
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
-           
+
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -20,8 +20,10 @@ namespace travelingExperience.DbConnetion
                 .HasForeignKey(t => t.UserID);
 
 
-            
+
+
         }
+        public DbSet<Reserve> Reserves { get; set; }
         public DbSet<Travel> Travels { get; set; }
         public DbSet<Comment> Comments { get; set; }
     }

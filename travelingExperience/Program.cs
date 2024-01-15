@@ -18,6 +18,7 @@ public class Program
             .AddRoleManager<RoleManager<IdentityRole>>();
         // Other service registrations
         builder.Services.AddScoped<CommentService>();
+        builder.Services.AddScoped<ReservationService>();
 
 
 

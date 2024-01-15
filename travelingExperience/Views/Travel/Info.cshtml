@@ -7,6 +7,9 @@
     ViewData["Title"] = "Travel Magazine";
 }
 
+
+
+
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -56,6 +59,20 @@
                                     <span class="badge bg-primary">UPCOMING</span>
                                 }
                             </p>
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <form asp-action="Reservation" asp-controller="User" method="post">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="travelId" value="@Model.Id" />
+                                    <label for="reservedSeats">Number of Seats:</label>
+                                    <input type="number" name="reservedSeats" required />
+                                    <button type="submit">Reserve Seats</button>
+                                </form>
+                            }
+                            else
+                            {
+                                <p>Please <a href="/Account/Login">log in</a> to make a reservation.</p>
+                            }
                             <div class="text-end">
                                 <a class="btn btn-outline-success mt-2" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
                                 <a class="btn btn-outline-secondary mt-2" asp-action="Index">Show All</a>
@@ -67,3 +84,4 @@
         </div>
     </div>
 </div>
+

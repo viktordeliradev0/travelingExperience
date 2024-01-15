@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using travelingExperience.Data.Services;
+using travelingExperience.DbConnetion;
 using travelingExperience.Entity;
 using travelingExperience.Models;
 
@@ -12,11 +14,15 @@ namespace sharedTravel.Controllers
 
         private readonly ITravelsService _service;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly AppDbContext _db;
+        private readonly ReservationService _reservationService;
 
-        public TravelController(ITravelsService service, UserManager<ApplicationUser> userManager)
+        public TravelController(ITravelsService service, UserManager<ApplicationUser> userManager, AppDbContext db,ReservationService reservationService)
         {
             _service = service;
             _userManager = userManager;
+            _db = db;
+            _reservationService = reservationService;
         }
         public async Task<IActionResult> Index()
         {
@@ -111,5 +117,50 @@ namespace sharedTravel.Controllers
 
             return RedirectToAction("Index");
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Reservation(int travelId, int reservedSeats)
+        {
+            // Retrieve the current user
+            var user = await _userManager.GetUserAsync(User);
+
+            // Retrieve the travel
+            var travel = await _db.Travels.FindAsync(travelId);
+
+            // Check if the travel and user exist
+            if (travel == null || user == null)
+            {
+                return NotFound(); // Handle the case where travel or user is not found
+            }
+
+            // Check if there are enough available seats
+            if (travel.Seats < reservedSeats)
+            {
+                // Handle case where there aren't enough available seats
+                ModelState.AddModelError("reservedSeats", "Not enough available seats.");
+                return View("TravelDetails", travel);
+            }
+
+            // Create a new reservation
+            var reservation = new Reserve
+            {
+                UserID = user.Id,
+                TravelID = travelId,
+                ReservedSeats = reservedSeats,
+                ReservationDate = DateTime.Now
+            };
+
+            // Update the available seats in the travel
+            travel.Seats -= reservedSeats;
+
+            // Add the reservation to the context and save changes
+            _db.Reserves.Add(reservation);
+            await _db.SaveChangesAsync();
+
+            return RedirectToAction("MyReservations");
+        }
+       
+
     }
 }

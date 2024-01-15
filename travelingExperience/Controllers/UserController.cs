@@ -20,9 +20,10 @@ namespace travelingExperience.Controllers
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ITravelsService _travelsService;
         private readonly CommentService _commentService;
+        private readonly ReservationService _reservationService;
 
 
-        public UserController(AppDbContext db, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> singInManager, RoleManager<IdentityRole> roleManager, ITravelsService travelsService, CommentService commentService)
+        public UserController(AppDbContext db, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> singInManager, RoleManager<IdentityRole> roleManager, ITravelsService travelsService, CommentService commentService,ReservationService reservationService)
         {
             encoder = new ScryptEncoder();
             _singInManager = singInManager;
@@ -31,6 +32,7 @@ namespace travelingExperience.Controllers
             _userManager = userManager;
             _travelsService = travelsService;
             _commentService = commentService;
+            _reservationService = reservationService;
         }
         [HttpGet]
         public async Task<IActionResult> UserTravels()
@@ -244,6 +246,30 @@ namespace travelingExperience.Controllers
         {
             await _singInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
+        }
+        public async Task<IActionResult> MyReservations()
+        {
+            // Retrieve the current user
+            var user = await _userManager.GetUserAsync(User);
+           
+
+
+            if (user == null)
+            {
+                return RedirectToAction("Index");
+               
+                
+            }
+
+            // Check if the user is authenticated
+           
+            var userId = user.Id;
+
+
+            List<Reserve> reservations = _reservationService.GetReservationsForUser(userId);
+
+
+            return View(reservations);
         }
     }
 }

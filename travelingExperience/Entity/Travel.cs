@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using travelingExperience.Data.Enums;
 using travelingExperience.Models;
@@ -43,15 +45,23 @@ namespace travelingExperience.Entity
         [Display(Name = "Seats")]
         public int Seats { get; set; }
 
-        //Relationship
+        // Navigation property for reservations
+        public  List<Reserve> Reserves { get; set; }
+
+        // Relationship
         [ForeignKey("UserID")]
         public ApplicationUser User { get; set; }
 
-
-
-        //ForeingKey
-
-
-
+       
+       [NotMapped]
+        public int AvailableSeats
+        {
+            get
+            {
+                // Calculate available seats based on the number of reservations
+                int reservedSeats = Reserves?.Sum(r => r.ReservedSeats) ?? 0;
+                return Seats - reservedSeats;
+            }
+        }
     }
 }

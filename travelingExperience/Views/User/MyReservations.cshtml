@@ -1,0 +1,35 @@
+﻿@model List<travelingExperience.Models.Reserve>
+
+<h2>My Reservations</h2>
+
+@if (Model.Any())
+{
+    <table>
+        <thead>
+            <tr>
+                <th>Start Destination</th>
+                <th>End Destination</th>
+                <th>Reserved Seats</th>
+                <th>Reservation Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var travel in Model)
+            {
+                
+                    <tr>
+                     @*   // <td>@travel.StartDestination</td>
+                       // <td>@travel.EndDestination</td> *@
+                        <td>@travel.ReservedSeats</td>
+                        <td>@travel.ReservationDate</td>
+                    </tr>
+                
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>You haven't made any reservations yet.</p>
+}
+
