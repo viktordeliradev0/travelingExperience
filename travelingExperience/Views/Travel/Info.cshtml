@@ -29,6 +29,7 @@
                                 {
                                     <p>@Model.User.Id</p>
                                 <a href="@Url.Action("ProfileView", "User", new { id = Model.User.Id })">@Model.User.UserName</a>
+                               
                                 }
                                 else
                                 {
@@ -71,7 +72,7 @@
                             }
                             else
                             {
-                                <p>Please <a href="/Account/Login">log in</a> to make a reservation.</p>
+                                <p>Please <a href="/User/Login">log in</a> to make a reservation.</p>
                             }
                             <div class="text-end">
                                 <a class="btn btn-outline-success mt-2" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>

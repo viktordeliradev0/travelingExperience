@@ -23,7 +23,7 @@ namespace travelingExperience.Controllers
         private readonly ReservationService _reservationService;
 
 
-        public UserController(AppDbContext db, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> singInManager, RoleManager<IdentityRole> roleManager, ITravelsService travelsService, CommentService commentService,ReservationService reservationService)
+        public UserController(AppDbContext db, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> singInManager, RoleManager<IdentityRole> roleManager, ITravelsService travelsService, CommentService commentService, ReservationService reservationService)
         {
             encoder = new ScryptEncoder();
             _singInManager = singInManager;
@@ -42,7 +42,7 @@ namespace travelingExperience.Controllers
 
             return View(userTravels);
         }
-        public async Task<IActionResult> Profile(string id)
+        public async Task<IActionResult> Profile()
         {
             var user = await _userManager.GetUserAsync(User);
 
@@ -51,6 +51,8 @@ namespace travelingExperience.Controllers
             {
                 return NotFound(); // Handle case where user is not found
             }
+            var userId = user.Id;
+            var comments = _commentService.GetCommentsByUserId(userId);
 
             var model = new UserProfileViewModel
             {
@@ -60,9 +62,9 @@ namespace travelingExperience.Controllers
                 Email = user.Email,
                 Number = user.Number,
                 Age = user.Age,
-                Comments = user.Comments
+                Comments = user.Comments,
             };
-
+           
             return View(model);
 
 
@@ -83,19 +85,23 @@ namespace travelingExperience.Controllers
             return user;
         }
 
+       
+       
+
         public async Task<IActionResult> ProfileView(string id)
         {
             var user = await GetUserByIdOrNotFoundAsync(id);
-
+            
             if (user == null)
             {
                 return NotFound(); // Handle case where user is not found
             }
 
-            var comments = _commentService.GetCommentsByUserId(id);
+           var comments = _commentService.GetCommentsByUserId(id);
 
             var model = new UserProfileViewModel
             {
+                Id = id,
                 Name = user.Name,
                 SName = user.SName,
                 UserName = user.UserName,
@@ -107,13 +113,15 @@ namespace travelingExperience.Controllers
 
             return View(model);
         }
-
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddComment(string userId, string commentText)
         {
-            var targetUser = await GetUserByIdAsync(userId);
+          
+            var user = await GetUserByIdAsync(userId);
 
-            if (targetUser == null)
+
+            if (user == null)
             {
                 return NotFound(); // Handle case where target user is not found
             }
@@ -125,8 +133,8 @@ namespace travelingExperience.Controllers
                 CommentDate = DateTime.Now
             };
 
-            targetUser.Comments = targetUser.Comments ?? new List<Comment>();
-            targetUser.Comments.Add(newComment);
+            user.Comments = user.Comments ?? new List<Comment>();
+            user.Comments.Add(newComment);
 
             await _commentService.SaveChangesAsync();
 
@@ -247,24 +255,18 @@ namespace travelingExperience.Controllers
             await _singInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
+
+       
         public async Task<IActionResult> MyReservations()
         {
             // Retrieve the current user
             var user = await _userManager.GetUserAsync(User);
-           
-
 
             if (user == null)
             {
                 return RedirectToAction("Index");
-               
-                
             }
-
-            // Check if the user is authenticated
-           
             var userId = user.Id;
-
 
             List<Reserve> reservations = _reservationService.GetReservationsForUser(userId);
 

@@ -26,15 +26,24 @@ else
     <p>No comments yet.</p>
 }
 
-<form method="post" asp-action="AddComment">
-    @if (Model.User != null)
-    {
-        <input type="hidden" name="userId" value="@Model.User.Id" />
-    }
+@if (Model != null && Model.User != null)
+{
+    <p>Not avalible user</p>
+}
+else
+{
+    <form method="post" asp-action="AddComment">
 
-    <div class="form-group">
-        <label for="commentText">Add Comment:</label>
-        <textarea class="form-control" id="commentText" name="commentText" rows="3"></textarea>
-    </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
-</form>
+
+        <input type="hidden" name="userId" value="@Model.Id" />
+
+
+
+        <div class="form-group">
+            <label for="commentText">Add Comment:</label>
+            <textarea class="form-control" id="commentText" name="commentText" rows="3"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+
+    </form>
+}
