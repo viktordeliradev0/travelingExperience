@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using travelingExperience.Data.Enums;
 using travelingExperience.Data.Services;
 using travelingExperience.DbConnetion;
 using travelingExperience.Entity;
@@ -160,7 +161,24 @@ namespace sharedTravel.Controllers
 
             return RedirectToAction("MyReservations");
         }
-       
+        //public IActionResult FilterTravels(TravelDestinations startDestination, TravelDestinations endDestination)
+        //{
+        //    var startDestinationString = startDestination.ToString();
+        //    var endDestinationString = endDestination.ToString();
+
+        //    var filteredTravels = _db.Travels
+        //        .Where(t =>
+        //            (startDestination == 0 || t.StartDestination.ToString().Contains(startDestinationString))
+        //            && (endDestination == 0 || t.EndDestination.ToString().Contains(endDestinationString)))
+        //        .ToList();
+        //    ViewBag.AllTravels = allTravels;
+        //    ViewBag.FilteredTravels = filteredTravels;
+
+        //    return View(filteredTravels);
+        //}
+
+
+
 
     }
 }

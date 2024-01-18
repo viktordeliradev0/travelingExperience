@@ -1,9 +1,39 @@
-﻿@model IEnumerable<travelingExperience.Entity.Travel>
+﻿@using travelingExperience.Data.Enums
+@model IEnumerable<travelingExperience.Entity.Travel>
 
 
 @{
     ViewData["Title"] = "List of Travels";
 }
+
+<form id="filterForm" class="mb-3">
+    @* Dropdown for selecting start destination *@
+    <div class="input-group mb-3">
+        <label class="input-group-text" for="startDestinationSelect">Select Start Destination:</label>
+        <select class="form-select" id="startDestinationSelect">
+            <option value="">All Start Destinations</option>
+            @foreach (var value in Enum.GetValues(typeof(TravelDestinations)))
+            {
+                <option value="@value">@value</option>
+            }
+        </select>
+    </div>
+
+    @* Dropdown for selecting end destination *@
+    <div class="input-group mb-3">
+        <label class="input-group-text" for="endDestinationSelect">Select End Destination:</label>
+        <select class="form-select" id="endDestinationSelect">
+            <option value="">All End Destinations</option>
+            @foreach (var value in Enum.GetValues(typeof(TravelDestinations)))
+            {
+                <option value="@value">@value</option>
+            }
+        </select>
+    </div>
+
+    <button type="button" class="btn btn-primary" id="filterButton" onclick="filterDestinations()">Filter by Destinations</button>
+
+</form>
 
 <div class="row">
     @foreach (var item in Model)
@@ -70,4 +100,37 @@
         </div>
     }
 </div>
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Get all the card elements
+            var cards = document.querySelectorAll('.card');
+
+            // Handle filter button click
+            document.getElementById('filterButton').addEventListener('click', function () {
+                filterDestinations();
+            });
+
+            function filterDestinations() {
+                var startDestination = document.getElementById('startDestinationSelect').value.toLowerCase();
+                var endDestination = document.getElementById('endDestinationSelect').value.toLowerCase();
+
+                cards.forEach(function (card) {
+                    var startDestinationText = card.querySelector('.card-body .card-text:nth-child(1)').textContent.toLowerCase();
+                    var endDestinationText = card.querySelector('.card-body .card-text:nth-child(2)').textContent.toLowerCase();
+
+                    if ((startDestination === '' || startDestinationText.includes(startDestination)) &&
+                        (endDestination === '' || endDestinationText.includes(endDestination))) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            }
+        });
+    </script>
+}
+
+
+
 

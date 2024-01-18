@@ -273,5 +273,29 @@ namespace travelingExperience.Controllers
 
             return View(reservations);
         }
+        [HttpPost]
+        public async Task<IActionResult> CancelReservation(int reservationId)
+        {
+            // Retrieve the reservation
+            var reservation = await _db.Reserves.FindAsync(reservationId);
+
+            // Check if the reservation exists
+            if (reservation == null)
+            {
+                return NotFound(); // Handle the case where the reservation is not found
+            }
+
+            // Retrieve the associated travel
+            var travel = await _db.Travels.FindAsync(reservation.TravelID);
+
+            // Update the available seats in the travel
+            travel.Seats += reservation.ReservedSeats;
+
+            // Remove the reservation from the context and save changes
+            _db.Reserves.Remove(reservation);
+            await _db.SaveChangesAsync();
+
+            return RedirectToAction("MyReservations");
+        }
     }
 }

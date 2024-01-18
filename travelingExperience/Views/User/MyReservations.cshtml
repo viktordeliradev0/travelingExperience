@@ -23,7 +23,9 @@
                         <td>@travel.ReservedSeats</td>
                         <td>@travel.ReservationDate</td>
                     </tr>
-                
+                <form method="post" asp-action="CancelReservation" asp-route-reservationId="@travel.ReservationID">
+                    <button type="submit">Cancel Reservation</button>
+                </form>
             }
         </tbody>
     </table>
