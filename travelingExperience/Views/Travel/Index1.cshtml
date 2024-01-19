@@ -6,6 +6,7 @@
     ViewData["Title"] = "List of Travels";
 }
 
+
 <form id="filterForm" class="mb-3">
     @* Dropdown for selecting start destination *@
     <div class="input-group mb-3">
@@ -64,17 +65,17 @@
                             <p class="card-text">@item.Price</p>
                             <p class="card-text ">
                                 <b>Status: </b>
-                                @if (DateTime.Now >= item.StartDate && DateTime.Now <= item.EndDate)
+                                @if (DateTime.Now >= item.StartDate && DateTime.Now <= item.EndDate && item.AvailableSeats > 0)
                                 {
-                                    <span class="badge bg-success text-white">AVAILABLE</span>
+                                    <span class="badge bg-success">AVAILABLE</span>
                                 }
-                                else if (DateTime.Now > item.EndDate)
+                                else if (DateTime.Now > item.EndDate || item.Seats == 0)
                                 {
-                                    <span class="badge bg-danger text-white">EXPIRD</span>
+                                    <span class="badge bg-danger">EXPIRED</span>
                                 }
                                 else
                                 {
-                                    <span class="badge bg-primary text-white">UPCOMING</span>
+                                    <span class="badge bg-primary">UPCOMING</span>
                                 }
                             </p>
 

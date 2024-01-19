@@ -140,7 +140,13 @@ namespace sharedTravel.Controllers
             {
                 // Handle case where there aren't enough available seats
                 ModelState.AddModelError("reservedSeats", "Not enough available seats.");
-                return View("TravelDetails", travel);
+
+                // You can also add a TempData message to display a warning on the redirected page
+                TempData["ReservationWarning"] = "Not enough available seats.";
+
+
+                // Redirect back to the Index1 page or any other page you want
+                return RedirectToAction("Index1");
             }
 
             // Create a new reservation
@@ -159,8 +165,10 @@ namespace sharedTravel.Controllers
             _db.Reserves.Add(reservation);
             await _db.SaveChangesAsync();
 
-            return RedirectToAction("MyReservations");
+            return RedirectToAction("Index1");
         }
+
+
         //public IActionResult FilterTravels(TravelDestinations startDestination, TravelDestinations endDestination)
         //{
         //    var startDestinationString = startDestination.ToString();

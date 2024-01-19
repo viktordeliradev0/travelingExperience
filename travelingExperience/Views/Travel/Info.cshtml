@@ -40,18 +40,18 @@
                                 @Model.Descrition
                             </p>
                             <p class="card-text">
-                                <b>Seats Available:</b> @Model.Seats<br />
+                                <b>Seats Available:</b> @Model.AvailableSeats<br />
                                 <b>Price:</b> @Model.Price.ToString("c", CultureInfo.CurrentCulture)
                             </p>
                         </div>
                         <div class="col-md-6">
                             <p class="card-text">
                                 <b>Status:</b><br />
-                                @if (DateTime.Now >= Model.StartDate && DateTime.Now <= Model.EndDate)
+                                @if (DateTime.Now >= Model.StartDate && DateTime.Now <= Model.EndDate && Model.AvailableSeats > 0)
                                 {
                                     <span class="badge bg-success">AVAILABLE</span>
                                 }
-                                else if (DateTime.Now > Model.EndDate)
+                                else if (DateTime.Now > Model.EndDate || Model.Seats == 0)
                                 {
                                     <span class="badge bg-danger">EXPIRED</span>
                                 }
@@ -59,16 +59,26 @@
                                 {
                                     <span class="badge bg-primary">UPCOMING</span>
                                 }
+
                             </p>
                             @if (User.Identity.IsAuthenticated)
                             {
-                                <form asp-action="Reservation" asp-controller="User" method="post">
-                                    @Html.AntiForgeryToken()
-                                    <input type="hidden" name="travelId" value="@Model.Id" />
-                                    <label for="reservedSeats">Number of Seats:</label>
-                                    <input type="number" name="reservedSeats" required />
-                                    <button type="submit">Reserve Seats</button>
-                                </form>
+                               
+                                    <form asp-action="Reservation" asp-controller="Travel" method="post">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="travelId" value="@Model.Id" />
+                                        <label for="reservedSeats">Number of Seats:</label>
+                                        <input type="number" name="reservedSeats" required />
+                                        <button type="submit">Reserve Seats</button>
+                                    @if (TempData["ReservationWarning"] != null)
+                                    {
+                                        <div class="alert alert-warning">
+                                            @TempData["ReservationWarning"]
+                                        </div>
+                                    }
+
+                                    </form>
+                                
                             }
                             else
                             {
