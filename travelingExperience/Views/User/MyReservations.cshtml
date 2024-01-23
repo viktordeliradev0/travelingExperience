@@ -16,16 +16,19 @@
         <tbody>
             @foreach (var travel in Model)
             {
-                
+              
                     <tr>
-                     @*   // <td>@travel.StartDestination</td>
-                       // <td>@travel.EndDestination</td> *@
+                        <td>@travel.Travel.StartDestination</td>
+                        <td>@travel.Travel.EndDestination</td>
                         <td>@travel.ReservedSeats</td>
                         <td>@travel.ReservationDate</td>
+                    <td>
+                        <form method="post" asp-action="CancelReservation" asp-route-reservationId="@travel.ReservationID">
+                            <button type="submit">Cancel Reservation</button>
+                        </form>
+                    </td>
                     </tr>
-                <form method="post" asp-action="CancelReservation" asp-route-reservationId="@travel.ReservationID">
-                    <button type="submit">Cancel Reservation</button>
-                </form>
+               
             }
         </tbody>
     </table>

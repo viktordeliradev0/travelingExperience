@@ -32,8 +32,13 @@
                     <td>@travel.EndDate</td>
                     <td>@travel.Price</td>
                     <td>@travel.Seats</td>
+                        <td><a class="btn btn-outline-info" asp-action="Edit" asp-controller="Travel" asp-route-id="@travel.Id">Edit</a>
+                <a class="btn btn-outline-info" asp-action="Details" asp-controller="Travel" asp-route-id="@travel.Id">Details</a>
+                <a class="btn btn-outline-danger" asp-action="Delete" asp-controller="Travel" asp-route-id="@travel.Id">Delete</a></td>
                     <!-- Add other columns as needed -->
+                   
                 </tr>
+                
             }
         </tbody>
     </table>

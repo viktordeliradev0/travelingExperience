@@ -27,7 +27,7 @@
                                 <b>Posted By:</b><br />
                                 @if (Model != null && Model.User != null)
                                 {
-                                    <p>@Model.User.Id</p>
+                                  
                                 <a href="@Url.Action("ProfileView", "User", new { id = Model.User.Id })">@Model.User.UserName</a>
                                
                                 }
@@ -84,10 +84,7 @@
                             {
                                 <p>Please <a href="/User/Login">log in</a> to make a reservation.</p>
                             }
-                            <div class="text-end">
-                                <a class="btn btn-outline-success mt-2" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
-                                <a class="btn btn-outline-secondary mt-2" asp-action="Index">Show All</a>
-                            </div>
+                           
                         </div>
                     </div>
                 </div>

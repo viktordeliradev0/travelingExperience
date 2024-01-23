@@ -46,7 +46,7 @@ namespace travelingExperience.Entity
         public int Seats { get; set; }
 
         // Navigation property for reservations
-        public  List<Reserve> Reserves { get; set; }
+        public required List<Reserve> Reserves { get; set; }
 
         // Relationship
         [ForeignKey("UserID")]

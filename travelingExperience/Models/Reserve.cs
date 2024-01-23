@@ -23,6 +23,6 @@ namespace travelingExperience.Models
 
         // Define a foreign key relationship with the Travel model
         [ForeignKey("TravelID")]
-        public Travel Travel { get; set; }
+        public  Travel Travel { get; set; }
     }
 }

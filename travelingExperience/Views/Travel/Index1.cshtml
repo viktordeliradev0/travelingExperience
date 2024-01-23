@@ -33,9 +33,10 @@
     </div>
 
     <button type="button" class="btn btn-primary" id="filterButton" onclick="filterDestinations()">Filter by Destinations</button>
+    
 
 </form>
-
+<div id="noResultsMessage" style="display: none;">No matching travels found.</div>
 <div class="row">
     @foreach (var item in Model)
     {
@@ -116,6 +117,8 @@
                 var startDestination = document.getElementById('startDestinationSelect').value.toLowerCase();
                 var endDestination = document.getElementById('endDestinationSelect').value.toLowerCase();
 
+                var matchingCards = 0; // Variable to count matching cards
+
                 cards.forEach(function (card) {
                     var startDestinationText = card.querySelector('.card-body .card-text:nth-child(1)').textContent.toLowerCase();
                     var endDestinationText = card.querySelector('.card-body .card-text:nth-child(2)').textContent.toLowerCase();
@@ -123,14 +126,24 @@
                     if ((startDestination === '' || startDestinationText.includes(startDestination)) &&
                         (endDestination === '' || endDestinationText.includes(endDestination))) {
                         card.style.display = 'block';
+                        matchingCards++;
                     } else {
                         card.style.display = 'none';
                     }
                 });
+
+                // Show message if no matching cards
+                var noResultsMessage = document.getElementById('noResultsMessage');
+                if (matchingCards === 0) {
+                    noResultsMessage.style.display = 'block';
+                } else {
+                    noResultsMessage.style.display = 'none';
+                }
             }
         });
     </script>
 }
+
 
 
 

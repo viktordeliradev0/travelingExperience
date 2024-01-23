@@ -63,7 +63,7 @@ namespace sharedTravel.Controllers
             {
               
                    await  _service.AddAsync(travel);
-                return RedirectToAction("Index");
+                return RedirectToAction("Index1");
 
             }
             return View(travel);
@@ -93,7 +93,7 @@ namespace sharedTravel.Controllers
             {
                 await _service.UpdateAsync(id, travel);
                 await _service.DeleteAsync(id);
-                return RedirectToAction("Index");
+                return RedirectToAction("Index1");
             }
            
             return View(travel);
