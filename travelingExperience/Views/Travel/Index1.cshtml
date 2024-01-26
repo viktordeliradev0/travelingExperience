@@ -40,6 +40,7 @@
 <div class="row">
     @foreach (var item in Model)
     {
+       
         <div class="col-md-4 col-xs-6 border-primary mb-3">
             <div class="card mb-3" style="max-width: 540px;">
                 <div class="row g-0">
@@ -53,8 +54,17 @@
                         </div>
                     </div>
                     <div class="col-md-6">
-                        @*                         <img src="@item.ImageURL" width="100%" alt="@item.Name">
-                    *@
+                        @if (item.TravelPicData != null && item.ProfilePictureContentType != null)
+                        {
+                            string imageBase64 = Convert.ToBase64String(item.TravelPicData);
+                            string imageDataURL = string.Format("data:{0};base64,{1}", item.ProfilePictureContentType, imageBase64);
+                            <img src="@imageDataURL" alt="Profile Picture" class="border-info rounded-circle" style="max-width: 100px; max-height: 100px;" />
+                        }
+                        else
+                        {
+                            <span>No Picture</span>
+                        }
+
                     </div>
                     <div class="col-md-6">
                         <div class="card-body">
@@ -138,11 +148,13 @@
                     noResultsMessage.style.display = 'block';
                 } else {
                     noResultsMessage.style.display = 'none';
-                }
+                }  
             }
         });
     </script>
+
 }
+
 
 
 

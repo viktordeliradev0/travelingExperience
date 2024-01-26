@@ -57,11 +57,19 @@ namespace sharedTravel.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Create([Bind("UserID,StartDestination,EndDestination,Descrition,StartDate,EndDate,Price,Seats")] Travel travel)
+        public async Task<IActionResult> Create([Bind("UserID,StartDestination,EndDestination,Descrition,StartDate,EndDate,Price,Seats,TravelPic")] Travel travel)
         {
             if (!ModelState.IsValid)
             {
-              
+                if (travel.TravelPic !=null)
+                {
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        await travel.TravelPic.CopyToAsync(memoryStream);
+                       travel.TravelPicData = memoryStream.ToArray();
+                        travel.ProfilePictureContentType = travel.TravelPic.ContentType;    
+                    }
+                }
                    await  _service.AddAsync(travel);
                 return RedirectToAction("Index1");
 
@@ -91,6 +99,15 @@ namespace sharedTravel.Controllers
             travel.Id = 0;
             if (!ModelState.IsValid)
             {
+                if (travel.TravelPic != null && travel.TravelPic.Length >0)
+                {
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        await travel.TravelPic.CopyToAsync(memoryStream);
+                        travel.TravelPicData = memoryStream.ToArray();
+                        travel.ProfilePictureContentType = travel.TravelPic.ContentType;
+                    }
+                }
                 await _service.UpdateAsync(id, travel);
                 await _service.DeleteAsync(id);
                 return RedirectToAction("Index1");

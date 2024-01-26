@@ -9,8 +9,18 @@
 <h1> Update Travel</h1>
 <div class="row">
     <div class="col-md-8 offset-2">
-        <form asp-action="Edit">
+        <form asp-action="Edit" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @if (Model.TravelPicData != null && Model.ProfilePictureContentType != null)
+            {
+                string imageBase64 = Convert.ToBase64String(Model.TravelPicData);
+                string imageDataURL = string.Format("data:{0};base64,{1}", Model.ProfilePictureContentType, imageBase64);
+                <img src="@imageDataURL" alt="Profile Picture" class="border-info rounded-circle" style="max-width: 100px; max-height: 100px;" />
+            }
+            else
+            {
+                <span>No Picture</span>
+            }
             <input type="hidden" asp-for="UserID" value="@User.FindFirstValue(ClaimTypes.NameIdentifier)" />
             <div class="form-group">
                 <label asp-for="StartDestination" class="control-label">Тръгване от:</label>
@@ -54,6 +64,11 @@
                 <label aps-for="Seats" class="control-label">Места:</label>
                 <input asp-for="Seats" class="form-control" />
                 <span asp-validation-for="Seats" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TravelPic"></label>
+                <input asp-for="TravelPic" type="file" class="form-control" />
+                <span asp-validation-for="TravelPic" class="text-danger"></span>
             </div>
             <input type="submit" value="Update" class="btn btn-outline-success" />
             <a class="btn btn-outline-secondary" asp-action="Index">Show All</a>

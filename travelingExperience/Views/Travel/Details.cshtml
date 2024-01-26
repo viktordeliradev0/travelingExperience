@@ -11,7 +11,16 @@
     <div class="col-md-8 offset-2">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
+            @if (Model.TravelPicData != null && Model.ProfilePictureContentType != null)
+            {
+                string imageBase64 = Convert.ToBase64String(Model.TravelPicData);
+                string imageDataURL = string.Format("data:{0};base64,{1}", Model.ProfilePictureContentType, imageBase64);
+                <img src="@imageDataURL" alt="Profile Picture" class="border-info rounded-circle" style="max-width: 100px; max-height: 100px;" />
+            }
+            else
+            {
+                <span>No Picture</span>
+            }
             <div class="form-group">
                 <label asp-for="StartDestination" class="control-label">Start Destination:</label>
                 @Html.DropDownListFor(m => m.StartDestination, Enum.GetValues(typeof(TravelDestinations)).Cast<TravelDestinations>().Select(enumValue => new SelectListItem
@@ -56,12 +65,16 @@
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
 
-            <div class="form-group">0
+            <div class="form-group">
                 <label asp-for="Seats" class="control-label">Seats:</label>
                 <input asp-for="Seats" class="form-control" readonly />
                 <span asp-validation-for="Seats" class="text-danger"></span>
             </div>
-
+            <div class="form-group">
+                <label asp-for="TravelPic" >Photo:</label>
+                <input asp-for="TravelPic" type="file "class="form-control"  />
+                <span asp-validation-for="TravelPic" class="text-danger"></span>
+            </div>
             <div class="form-group">
                 <a class="btn btn-outline-success float-right" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
                 <a class="btn btn-outline-secondary mr-2" asp-action="Index">Show All</a>

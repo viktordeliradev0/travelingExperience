@@ -1,0 +1,2 @@
+﻿ALTER TABLE Travels
+ADD TravelPic VARCHAR(MAX) NOT NULL;

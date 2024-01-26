@@ -10,7 +10,7 @@
 <h1>Create New Travel</h1>
 <div class="row">
     <div class="col-md-8 offset-2">
-        <form asp-action="Create">
+        <form asp-action="Create" enctype = "multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="UserID" value="@User.FindFirstValue(ClaimTypes.NameIdentifier)" />
 
@@ -56,6 +56,11 @@
                 <label aps-for="Seats" class="control-label">Места:</label>
                 <input asp-for="Seats" class="form-control" />
                 <span asp-validation-for="Seats" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label aps-for="TravelPic" class="control-label">Места:</label>
+                <input asp-for="TravelPic" class="form-control" />
+                <span asp-validation-for="TravelPic" class="text-danger"></span>
             </div>
             <input type="submit" value="Create" class="btn btn-outline-success" />
         </form>

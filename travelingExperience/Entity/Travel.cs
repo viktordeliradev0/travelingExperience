@@ -17,6 +17,16 @@ namespace travelingExperience.Entity
         [Required]
         public string UserID { get; set; }
 
+        [Display(Name = "Travel Picture")]
+        public byte[]? TravelPicData { get; set; }
+
+        [Display(Name = "Content Type")]
+        public string? ProfilePictureContentType { get; set; }
+        [Required]
+        [NotMapped]
+        [Display(Name = "Upload Profile Picture")]
+        public IFormFile TravelPic { get; set; }
+
         [Required(ErrorMessage = "Please select a start destination")]
         [Display(Name = "Start Destination")]
         public TravelDestinations StartDestination { get; set; }
